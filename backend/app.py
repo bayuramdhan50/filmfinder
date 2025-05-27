@@ -7,6 +7,10 @@ import json
 import nltk
 import time
 import traceback
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # Setup NLTK - Download resource yang dibutuhkan
 def setup_nltk():
@@ -322,6 +326,162 @@ def train_model():
         traceback.print_exc()
         return jsonify({
             "error": "Terjadi kesalahan saat melatih model",
+            "details": str(e)
+        }), 500
+
+@app.route('/api/search', methods=['GET'])
+def search_films():
+    """
+    Endpoint untuk mencari film menggunakan TMDB API
+    
+    Query parameters:
+    - q: query pencarian film
+    - page: halaman hasil (optional, default: 1)
+    
+    Response JSON:
+    {
+        "results": [list film],
+        "total_results": int,
+        "query": "query pencarian"
+    }
+    """
+    try:
+        query = request.args.get('q', '')
+        page = int(request.args.get('page', 1))
+        
+        if not query:
+            return jsonify({
+                "error": "Parameter query 'q' tidak boleh kosong"
+            }), 400
+        
+        # Pencarian film menggunakan translator
+        search_results = film_translator.search_films(query)
+        
+        return jsonify({
+            "results": search_results,
+            "total_results": len(search_results),
+            "query": query,
+            "page": page
+        })
+    
+    except Exception as e:
+        print(f"Error in /api/search: {e}")
+        traceback.print_exc()
+        return jsonify({
+            "error": "Terjadi kesalahan saat mencari film",
+            "details": str(e)
+        }), 500
+
+@app.route('/api/popular', methods=['GET'])
+def get_popular_films():
+    """
+    Endpoint untuk mendapatkan film populer dari TMDB
+    
+    Query parameters:
+    - limit: jumlah maksimal film (optional, default: 20)
+    
+    Response JSON:
+    {
+        "results": [list film populer],
+        "total_results": int
+    }
+    """
+    try:
+        limit = int(request.args.get('limit', 20))
+        limit = min(limit, 50)  # Maksimal 50 film
+        
+        # Dapatkan film populer
+        popular_films = film_translator.get_popular_films(limit)
+        
+        return jsonify({
+            "results": popular_films,
+            "total_results": len(popular_films)
+        })
+    
+    except Exception as e:
+        print(f"Error in /api/popular: {e}")
+        traceback.print_exc()
+        return jsonify({
+            "error": "Terjadi kesalahan saat mengambil film populer",
+            "details": str(e)
+        }), 500
+
+@app.route('/api/film/<film_id>', methods=['GET'])
+def get_film_details(film_id):
+    """
+    Endpoint untuk mendapatkan detail lengkap film berdasarkan ID atau title
+    
+    Path parameters:
+    - film_id: ID TMDB atau judul film
+    
+    Response JSON:
+    {
+        "film": {detail lengkap film}
+    }
+    """
+    try:
+        # Dapatkan detail film
+        film_details = film_translator.get_film_details(film_id)
+        
+        if not film_details:
+            return jsonify({
+                "error": "Film tidak ditemukan"
+            }), 404
+        
+        return jsonify({
+            "film": film_details
+        })
+    
+    except Exception as e:
+        print(f"Error in /api/film/{film_id}: {e}")
+        traceback.print_exc()
+        return jsonify({
+            "error": "Terjadi kesalahan saat mengambil detail film",
+            "details": str(e)
+        }), 500
+
+@app.route('/api/recommend', methods=['POST'])
+def get_recommendations_by_genre():
+    """
+    Endpoint untuk mendapatkan rekomendasi film berdasarkan genre spesifik
+    
+    Request JSON:
+    {
+        "genres": ["list genre"],
+        "limit": int (optional, default: 10)
+    }
+    
+    Response JSON:
+    {
+        "recommendations": [list film],
+        "total_results": int,
+        "genres": ["genre yang dicari"]
+    }
+    """
+    try:
+        data = request.get_json()
+        genres = data.get('genres', [])
+        limit = data.get('limit', 10)
+        
+        if not genres:
+            return jsonify({
+                "error": "Parameter 'genres' tidak boleh kosong"
+            }), 400
+        
+        # Dapatkan rekomendasi berdasarkan genre
+        recommendations = film_translator.get_recommendations(genres, limit)
+        
+        return jsonify({
+            "recommendations": recommendations,
+            "total_results": len(recommendations),
+            "genres": genres
+        })
+    
+    except Exception as e:
+        print(f"Error in /api/recommend: {e}")
+        traceback.print_exc()
+        return jsonify({
+            "error": "Terjadi kesalahan saat mengambil rekomendasi",
             "details": str(e)
         }), 500
 

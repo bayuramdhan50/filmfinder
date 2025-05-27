@@ -46,7 +46,8 @@ class FilmTranslator:
             # Buat contoh data default jika file tidak ditemukan
             return {
                 "Dune": {
-                    "title": "Dune",                    "release_year": 2021,
+                    "title": "Dune",
+                    "release_year": 2021,
                     "director": "Denis Villeneuve",
                     "genre": ["Sci-Fi", "Action", "Adventure", "Drama"],
                     "description": "Film yang mengadaptasi novel fiksi ilmiah terkenal karya Frank Herbert.",
@@ -62,7 +63,7 @@ class FilmTranslator:
         Parameters
         ----------
         genres : list
-            List genre film (bisa berupa string atau dict dengan format {'genre': ..., 'confidence': ...})
+            List genre film yang dicari
         limit : int
             Jumlah maksimal rekomendasi yang dikembalikan
             
@@ -72,27 +73,17 @@ class FilmTranslator:
             List film yang direkomendasikan
         """
         try:
-            # Konversi format genres jika diperlukan
-            processed_genres = []
-            for genre in genres:
-                if isinstance(genre, dict):
-                    # Jika berupa dict dengan format dari classifier
-                    processed_genres.append(genre.get('genre', ''))
-                else:
-                    # Jika berupa string biasa
-                    processed_genres.append(str(genre))
-            
             # Cek cache terlebih dahulu
-            cache_key = '_'.join(sorted(processed_genres))
+            cache_key = '_'.join(sorted(genres))
             if cache_key in self.recommendation_cache:
                 return self.recommendation_cache[cache_key][:limit]
             
             # Gunakan TMDB API untuk mendapatkan rekomendasi
-            recommendations = self.tmdb_service.get_movie_recommendations_by_genre(processed_genres, limit)
+            recommendations = self.tmdb_service.get_movie_recommendations_by_genre(genres, limit)
             
             # Jika TMDB API gagal atau tidak ada hasil, gunakan fallback
             if not recommendations:
-                recommendations = self._get_fallback_recommendations(processed_genres, limit)
+                recommendations = self._get_fallback_recommendations(genres, limit)
             
             # Simpan ke cache
             self.recommendation_cache[cache_key] = recommendations
@@ -102,13 +93,6 @@ class FilmTranslator:
         except Exception as e:
             print(f"Error getting recommendations: {e}")
             # Fallback ke data lokal
-            processed_genres = []
-            for genre in genres:
-                if isinstance(genre, dict):
-                    processed_genres.append(genre.get('genre', ''))
-                else:
-                    processed_genres.append(str(genre))
-            return self._get_fallback_recommendations(processed_genres, limit)
             return self._get_fallback_recommendations(genres, limit)
     
     def _get_fallback_recommendations(self, genres, limit=6):
@@ -131,11 +115,10 @@ class FilmTranslator:
         
         for film_name, film_data in self.fallback_films_data.items():
             film_genres = [g.lower() for g in film_data.get("genre", [])]
-              # Cek apakah ada genre yang cocok
+            
+            # Cek apakah ada genre yang cocok
             for genre in genres:
-                # Pastikan genre adalah string
-                genre_str = genre if isinstance(genre, str) else str(genre)
-                if any(genre_str.lower() in fg for fg in film_genres):
+                if any(genre.lower() in fg for fg in film_genres):
                     # Format data untuk konsistensi dengan TMDB
                     formatted_film = {
                         'id': film_name.replace(' ', '_').lower(),

@@ -106,22 +106,23 @@ export default function Home() {
         Mulai Mencari Film
       </button>
     </div>
-  );
-  const tabs = [
+  );  const tabs = [
     {
       id: 'recommender',
       label: 'Rekomendasi Film',
-      content: (
-        <div>
-          <FilmInputForm onResult={handleResult} onLoading={handleLoading} />
-          {isLoading ? <Loading /> : result ? <FilmResultCard result={result} /> : showInfo && <InfoCard />}
-        </div>
-      ),
+      default: true
+    },
+    {
+      id: 'search',
+      label: 'Cari Film'
+    },
+    {
+      id: 'popular',
+      label: 'Film Populer'
     },
     {
       id: 'chatbot',
-      label: 'Film Assistant',
-      content: <FilmChatbot />,
+      label: 'Film Assistant'
     },
   ];
   return (

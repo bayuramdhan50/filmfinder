@@ -1,0 +1,15 @@
+{
+    "umum": {
+        "rekomendasi film action terbaru": "Beberapa film action terbaru yang direkomendasikan termasuk 'John Wick: Chapter 4', 'The Equalizer 3', dan 'Fast X'."
+    },
+    "genre_info": {
+        "Action": "Genre film dengan penekanan pada adegan kekerasan atau fisik seperti perkelahian, adegan kejar-kejaran, atau aksi ketangkasan."
+    },
+    "film_detail": {
+        "Dune": [
+            "film tentang planet gurun",
+            "film adaptasi novel",
+            "film denis villeneuve"
+        ]
+    }
+}
