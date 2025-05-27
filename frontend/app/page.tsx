@@ -21,47 +21,89 @@ export default function Home() {
   const handleLoading = (loading: boolean) => {
     setIsLoading(loading);
   };
-
   const InfoCard = () => (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 w-full max-w-2xl mx-auto mt-8">
-      <h2 className="text-xl font-bold mb-4">Selamat Datang di FilmFinder</h2>
+    <div className="film-card rounded-lg p-8 w-full max-w-3xl mx-auto mt-8">
+      <div className="text-center mb-6">
+        <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-gray-900" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/>
+          </svg>
+        </div>
+        <h2 className="text-2xl font-bold text-gradient mb-2">Selamat Datang di FilmFinder</h2>
+        <p className="text-gray-300">Sistem Rekomendasi Film Berbasis NLP</p>
+      </div>
       
-      <div className="prose dark:prose-invert prose-sm max-w-none">
-        <p>
-          FilmFinder adalah sistem rekomendasi film berbasis Natural Language Processing (NLP)
-          yang dapat membantu Anda mengidentifikasi kemungkinan penyakit berdasarkan gejala yang Anda alami.
+      <div className="space-y-6 text-gray-300">
+        <p className="text-center leading-relaxed">
+          FilmFinder adalah sistem rekomendasi film cerdas yang menggunakan Natural Language Processing (NLP)
+          untuk memahami preferensi Anda dalam bahasa Indonesia dan memberikan rekomendasi film yang tepat.
         </p>
         
-        <h3 className="text-lg font-medium mt-4">Cara Menggunakan:</h3>
-        <ol className="list-decimal pl-5 space-y-2">
-          <li>
-            <strong>Deskripsikan gejala Anda</strong> dengan bahasa alami dalam kolom input. 
-            Contoh: "Saya mengalami demam tinggi, sakit kepala, dan nyeri otot sejak 2 hari yang lalu."
-          </li>
-          <li>
-            <strong>Gunakan fitur input suara</strong> dengan mengklik ikon mikrofon jika Anda lebih nyaman berbicara daripada mengetik.
-          </li>
-          <li>
-            <strong>Klik tombol "Analisis Gejala"</strong> untuk mendapatkan hasil deteksi beserta rekomendasi.
-          </li>
-          <li>
-            <strong>Konsultasikan dengan Asisten TanyaSehat</strong> di tab kedua untuk informasi lebih lanjut tentang penyakit atau perawatan kesehatan.
-          </li>
-        </ol>
+        <div className="grid md:grid-cols-2 gap-6">
+          <div>
+            <h3 className="text-lg font-semibold text-yellow-400 mb-3 flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              Cara Menggunakan:
+            </h3>
+            <ol className="list-decimal pl-5 space-y-2 text-sm">
+              <li>
+                <strong>Deskripsikan preferensi</strong> film Anda dengan bahasa natural dalam kolom input. 
+                Contoh: "Saya suka film action dengan superhero dan efek visual yang keren."
+              </li>
+              <li>
+                <strong>Gunakan fitur input suara</strong> dengan mengklik ikon mikrofon untuk kemudahan input.
+              </li>
+              <li>
+                <strong>Klik tombol "Cari Film"</strong> untuk mendapatkan rekomendasi film yang sesuai.
+              </li>
+              <li>
+                <strong>Chat dengan FilmBot</strong> di tab kedua untuk informasi lebih detail tentang film.
+              </li>
+            </ol>
+          </div>
+          
+          <div>
+            <h3 className="text-lg font-semibold text-yellow-400 mb-3 flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              Fitur Unggulan:
+            </h3>
+            <ul className="space-y-2 text-sm">
+              <li className="flex items-center">
+                <span className="w-2 h-2 bg-yellow-400 rounded-full mr-3"></span>
+                Pemahaman bahasa Indonesia yang natural
+              </li>
+              <li className="flex items-center">
+                <span className="w-2 h-2 bg-yellow-400 rounded-full mr-3"></span>
+                Rekomendasi berdasarkan genre, mood, dan preferensi
+              </li>
+              <li className="flex items-center">
+                <span className="w-2 h-2 bg-yellow-400 rounded-full mr-3"></span>
+                Skor kesesuaian untuk setiap rekomendasi
+              </li>
+              <li className="flex items-center">
+                <span className="w-2 h-2 bg-yellow-400 rounded-full mr-3"></span>
+                Chatbot untuk informasi detail film
+              </li>
+            </ul>
+          </div>        </div>
         
-        <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/30 rounded-lg">
-          <p className="text-sm">
-            <strong>Penting:</strong> Sistem ini dirancang sebagai alat bantu informatif dan bukan pengganti diagnosis medis profesional.
-            Selalu konsultasikan dengan dokter untuk diagnosis dan perawatan yang tepat.
+        <div className="mt-6 p-4 bg-gradient-to-r from-blue-900/30 to-purple-900/30 rounded-lg border border-blue-500/20">
+          <p className="text-sm text-center">
+            <strong className="text-yellow-400">Catatan:</strong> FilmFinder menggunakan teknologi NLP untuk memahami preferensi Anda
+            dan memberikan rekomendasi film yang personal. Semakin detail deskripsi Anda, semakin akurat rekomendasinya.
           </p>
         </div>
       </div>
       
       <button 
         onClick={() => setShowInfo(false)} 
-        className="mt-4 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 text-sm font-medium focus:outline-none"
+        className="mt-6 w-full film-button py-3 rounded-lg font-medium transition-all duration-200"
       >
-        Sembunyikan informasi ini
+        Mulai Mencari Film
       </button>
     </div>
   );
@@ -82,28 +124,48 @@ export default function Home() {
       content: <FilmChatbot />,
     },
   ];
-
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-50 py-10 px-4 sm:px-6">
-      <div className="max-w-4xl mx-auto">
-        <FilmHeader title="FilmFinder" subtitle="Rekomendasi film berdasarkan preferensi Anda" />
-        <FilmTabs tabs={tabs} />
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 text-gray-50 relative overflow-hidden">
+      {/* Background Effects */}
+      <div className="absolute inset-0 bg-[url('/film-bg.svg')] opacity-5"></div>
+      <div className="absolute inset-0">
+        <div className="absolute top-10 left-10 w-32 h-32 bg-yellow-400 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
+        <div className="absolute top-40 right-10 w-32 h-32 bg-purple-400 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
+        <div className="absolute bottom-20 left-20 w-32 h-32 bg-pink-400 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
       </div>
       
-      <footer className="mt-20 text-center text-sm text-gray-500 dark:text-gray-400">
-        <p>FilmFinder &copy; {new Date().getFullYear()} - Sistem Rekomendasi Film Berbasis NLP</p>
-        <p className="mt-1">Dibuat dengan TF-IDF, Naive Bayes, Flask dan Next.js</p>
+      <div className="relative z-10 py-10 px-4 sm:px-6">
+        <div className="max-w-5xl mx-auto">
+          <FilmHeader title="FilmFinder" subtitle="Rekomendasi film berdasarkan preferensi Anda" />
+          <FilmTabs tabs={tabs} />
+        </div>
         
-        {/* Tampilkan tombol untuk menampilkan info kembali jika sudah disembunyikan */}
-        {!showInfo && !isLoading && result && (
-          <button 
-            onClick={() => setShowInfo(true)} 
-            className="mt-2 text-blue-500 hover:text-blue-600 text-xs underline focus:outline-none"
-          >
-            Tampilkan informasi penggunaan
-          </button>
-        )}
-      </footer>
+        <footer className="mt-20 text-center">
+          <div className="max-w-2xl mx-auto">
+            <div className="bg-gray-800/30 backdrop-blur-sm rounded-lg p-6 border border-gray-700/30">
+              <p className="text-yellow-400 font-semibold text-lg mb-2">FilmFinder &copy; {new Date().getFullYear()}</p>
+              <p className="text-gray-300 text-sm mb-4">Sistem Rekomendasi Film Berbasis NLP</p>
+              <div className="flex flex-wrap justify-center gap-2 text-xs text-gray-400">
+                <span className="px-2 py-1 bg-gray-700/50 rounded">TF-IDF</span>
+                <span className="px-2 py-1 bg-gray-700/50 rounded">Naive Bayes</span>
+                <span className="px-2 py-1 bg-gray-700/50 rounded">Flask</span>
+                <span className="px-2 py-1 bg-gray-700/50 rounded">Next.js</span>
+                <span className="px-2 py-1 bg-gray-700/50 rounded">Tailwind CSS</span>
+              </div>
+              
+              {/* Tampilkan tombol untuk menampilkan info kembali jika sudah disembunyikan */}
+              {!showInfo && !isLoading && result && (
+                <button 
+                  onClick={() => setShowInfo(true)} 
+                  className="mt-4 text-yellow-400 hover:text-yellow-300 text-sm underline focus:outline-none transition-colors"
+                >
+                  Tampilkan informasi penggunaan
+                </button>
+              )}
+            </div>
+          </div>
+        </footer>
+      </div>
     </div>
   );
 }

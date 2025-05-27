@@ -10,20 +10,20 @@ interface HeaderProps {
 
 export default function FilmHeader({ title, subtitle }: HeaderProps) {
   return (
-    <header className="bg-gradient-to-r from-blue-600 to-blue-800 text-white shadow-md">
+    <header className="film-header sticky top-0 z-50">
       <div className="container mx-auto px-4 py-6 flex items-center justify-between">
-        <div className="flex items-center space-x-3">
-          {/* Logo */}
-          <div className="flex-shrink-0 bg-white p-1.5 rounded-md">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 4v16M17 4v16M3 8h18M3 16h18" />
+        <div className="flex items-center space-x-4">
+          {/* Logo Film */}
+          <div className="flex-shrink-0 bg-gradient-to-br from-yellow-400 to-yellow-600 p-2 rounded-lg film-sparkle">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-gray-900" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/>
             </svg>
           </div>
           
-          {/* Title */}
+          {/* Title dengan efek gradient */}
           <div>
-            <h1 className="text-2xl font-bold">{title}</h1>
-            {subtitle && <p className="text-sm text-blue-200">{subtitle}</p>}
+            <h1 className="text-3xl font-bold film-gradient-text">{title}</h1>
+            {subtitle && <p className="text-sm text-yellow-200 mt-1 font-medium">{subtitle}</p>}
           </div>
         </div>
         
@@ -31,21 +31,28 @@ export default function FilmHeader({ title, subtitle }: HeaderProps) {
         <ThemeToggle />
       </div>
       
-      {/* Feature Bar */}
-      <div className="bg-blue-700 py-2">
-        <div className="container mx-auto px-4 flex items-center justify-start space-x-6 text-sm">
-          <div className="flex items-center space-x-1">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-300" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+      {/* Feature Bar dengan tema film */}
+      <div className="bg-gradient-to-r from-gray-800 to-gray-900 py-3 border-t border-yellow-400/20">
+        <div className="container mx-auto px-4 flex items-center justify-start space-x-8 text-sm">
+          <div className="flex items-center space-x-2">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
             </svg>
-            <span className="text-blue-100">Rekomendasi Film Cerdas</span>
+            <span className="text-yellow-100">Rekomendasi Film Cerdas</span>
           </div>
           
-          <div className="flex items-center space-x-1">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-300" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+          <div className="flex items-center space-x-2">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
             </svg>
-            <span className="text-blue-100">Bahasa Indonesia</span>
+            <span className="text-yellow-100">Bahasa Indonesia</span>
+          </div>
+          
+          <div className="flex items-center space-x-2">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+            </svg>
+            <span className="text-yellow-100">AI-Powered</span>
           </div>
           
           <div className="flex items-center space-x-1">

@@ -30,13 +30,12 @@ export default function InputForm({ onResult, onLoading }: InputFormProps) {
     'Saya ingin menonton film sci-fi dengan plot twist menarik',
     'Film komedi romantis yang ringan dan menghibur'
   ]);
-
   // Menggunakan speech recognition hook
   const {
     isListening,
     startListening,
     stopListening,
-    hasRecognitionSupport
+    hasSupport
   } = useSpeechRecognition({ onResult: (text) => setPreferences(prev => prev + ' ' + text) });
 
   // Cek status koneksi ke backend API
@@ -131,131 +130,182 @@ export default function InputForm({ onResult, onLoading }: InputFormProps) {
   const fillExample = (example: string) => {
     setPreferences(example);
     setError('');
-  };
+  };  return (
+    <div className="film-card rounded-xl p-8 w-full max-w-4xl mx-auto shadow-2xl backdrop-blur-lg">
+      {/* Header dengan ikon film */}
+      <div className="text-center mb-8">
+        <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full mb-4 film-sparkle shadow-lg">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-gray-900" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/>
+          </svg>
+        </div>
+        <h2 className="text-3xl font-bold text-gradient mb-3">Temukan Film Impian Anda</h2>
+        <p className="text-gray-300 text-lg">Deskripsikan preferensi film dalam bahasa Indonesia dan dapatkan rekomendasi yang tepat</p>
+        
+        {/* Status koneksi */}
+        <div className="mt-4 flex items-center justify-center">
+          <div className={`flex items-center space-x-2 px-3 py-1 rounded-full text-xs font-medium ${
+            connectionStatus === 'connected' ? 'bg-green-900 bg-opacity-50 text-green-300 border border-green-500' :
+            connectionStatus === 'connecting' ? 'bg-yellow-900 bg-opacity-50 text-yellow-300 border border-yellow-500' :
+            connectionStatus === 'failed' ? 'bg-red-900 bg-opacity-50 text-red-300 border border-red-500' :
+            'bg-gray-900 bg-opacity-50 text-gray-300 border border-gray-500'
+          }`}>
+            <div className={`w-2 h-2 rounded-full ${
+              connectionStatus === 'connected' ? 'bg-green-400 animate-pulse' :
+              connectionStatus === 'connecting' ? 'bg-yellow-400 animate-spin' :
+              connectionStatus === 'failed' ? 'bg-red-400' : 'bg-gray-400'
+            }`}></div>
+            <span>
+              {connectionStatus === 'connected' ? 'Terhubung ke server' :
+               connectionStatus === 'connecting' ? 'Menghubungkan...' :
+               connectionStatus === 'failed' ? 'Koneksi terputus' : 'Status tidak diketahui'}
+            </span>
+          </div>
+        </div>
+      </div>
 
-  return (
-    <div className="w-full max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden p-6">
-      <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
-        <div className="space-y-2">
-          <label htmlFor="preferences" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-            Preferensi Film
+      <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
+        {/* Input Area */}
+        <div className="relative">          <label htmlFor="preferences" className="block text-sm font-medium text-yellow-300 mb-3 flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+            </svg>
+            Preferensi Film Anda
           </label>
-          
           <div className="relative">
             <textarea
               id="preferences"
               name="preferences"
-              rows={4}
+              rows={5}
               value={preferences}
               onChange={handleInputChange}
-              placeholder="Jelaskan apa jenis film yang Anda sukai, atau film seperti apa yang ingin Anda tonton..."
-              className="block w-full px-4 py-3 text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 border rounded-md focus:border-blue-500 focus:ring-blue-500 focus:outline-none"
-              aria-describedby="preferences-description"
+              placeholder="Contoh: Saya ingin film action superhero yang seru dengan efek visual yang memukau dan cerita yang menegangkan..."
+              className="film-input w-full p-4 rounded-lg resize-none placeholder-gray-400 text-white"
+              disabled={isSubmitting}
             />
             
-            {hasRecognitionSupport && (
-              <button 
+            {/* Voice Input Button */}
+            {hasSupport && (
+              <button
                 type="button"
                 onClick={isListening ? stopListening : startListening}
-                className={`absolute bottom-3 right-3 p-2 rounded-full ${
+                disabled={isSubmitting}
+                className={`absolute bottom-3 right-3 p-2 rounded-full transition-all duration-300 ${
                   isListening 
-                    ? 'bg-red-500 text-white' 
-                    : 'bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300'
-                }`}
-                aria-label={isListening ? 'Berhenti mendengarkan' : 'Mulai mendengarkan'}
-                title={isListening ? 'Berhenti mendengarkan' : 'Gunakan suara'}
+                    ? 'bg-red-500 hover:bg-red-600 text-white animate-pulse' 
+                    : 'bg-yellow-500 hover:bg-yellow-600 text-gray-900'
+                } disabled:opacity-50 disabled:cursor-not-allowed`}
+                title={isListening ? 'Berhenti merekam' : 'Mulai input suara'}
               >
-                {isListening ? (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 00-1 1v4a1 1 0 001 1h4a1 1 0 001-1V8a1 1 0 00-1-1H8z" clipRule="evenodd" />
-                  </svg>
-                ) : (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z" clipRule="evenodd" />
-                  </svg>
-                )}
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                    d={isListening 
+                      ? "M21 12a9 9 0 11-18 0 9 9 0 0118 0z M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"
+                      : "M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
+                    } 
+                  />
+                </svg>
               </button>
             )}
           </div>
           
-          <p id="preferences-description" className="text-xs text-gray-500 dark:text-gray-400">
-            Ceritakan tentang genre, tema, atau gaya film yang Anda sukai. Semakin detail semakin baik rekomendasinya.
-            {isListening && <span className="text-red-500 ml-2 animate-pulse">Mendengarkan...</span>}
-          </p>
+          {isListening && (
+            <div className="mt-2 text-center">
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs bg-red-900/50 text-red-300 border border-red-500/30">
+                <span className="w-2 h-2 bg-red-400 rounded-full mr-2 animate-ping"></span>
+                Sedang mendengarkan...
+              </span>
+            </div>
+          )}
         </div>
 
-        {/* Contoh input */}
-        <div className="space-y-2">
-          <p className="text-sm text-gray-600 dark:text-gray-400">Contoh:</p>
-          <div className="flex flex-wrap gap-2">
+        {/* Quick Examples */}
+        <div className="space-y-3">
+          <label className="block text-sm font-medium text-yellow-300">
+            Atau pilih contoh preferensi:
+          </label>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
             {examples.map((example, index) => (
               <button
                 key={index}
                 type="button"
                 onClick={() => fillExample(example)}
-                className="text-xs px-3 py-1 bg-blue-50 dark:bg-gray-700 text-blue-600 dark:text-blue-300 rounded-full hover:bg-blue-100 dark:hover:bg-gray-600 transition-colors"
+                disabled={isSubmitting}
+                className="text-left p-3 rounded-lg bg-gray-800/50 hover:bg-gray-700/50 text-gray-300 text-sm transition-all duration-200 border border-gray-600/30 hover:border-yellow-400/30 disabled:opacity-50"
               >
-                {example.length > 40 ? example.substring(0, 40) + '...' : example}
+                {example}
               </button>
             ))}
           </div>
         </div>
 
+        {/* Error Message */}
         {error && (
-          <div className="text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 p-3 rounded-md">
-            {error}
+          <div className="p-4 rounded-lg bg-red-900/50 border border-red-500/30 text-red-300">
+            <div className="flex items-center space-x-2">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+              </svg>
+              <span className="text-sm">{error}</span>
+            </div>
           </div>
         )}
 
+        {/* Action Buttons */}
         <div className="flex space-x-4">
           <button
             type="submit"
-            disabled={isSubmitting}
-            className={`flex-1 px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
-              isSubmitting ? 'opacity-70 cursor-not-allowed' : ''
+            disabled={isSubmitting || !preferences.trim()}
+            className={`flex-1 film-button px-6 py-3 rounded-lg font-semibold flex items-center justify-center space-x-2 ${
+              isSubmitting || !preferences.trim() ? 'opacity-50 cursor-not-allowed' : ''
             }`}
           >
             {isSubmitting ? (
               <>
-                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
-                Mencari...
+                <span>Mencari Film...</span>
               </>
             ) : (
-              'Cari Rekomendasi Film'
+              <>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <span>Cari Film</span>
+              </>
             )}
           </button>
           <button
             type="button"
             onClick={handleReset}
-            className="px-4 py-2 text-gray-700 dark:text-gray-300 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+            className="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-gray-300 rounded-lg font-semibold transition-all duration-200 border border-gray-600"
           >
             Reset
           </button>
         </div>
 
-        {/* Status koneksi API */}
-        <div className="flex items-center justify-end">
-          <div className="flex items-center">
-            <span className="text-xs text-gray-500 dark:text-gray-400 mr-2">API:</span>
+        {/* Connection Status */}
+        <div className="flex items-center justify-center">
+          <div className="flex items-center space-x-2 text-xs">
+            <span className="text-gray-400">Status API:</span>
             {connectionStatus === 'connecting' && (
-              <span className="flex items-center text-xs text-yellow-500">
-                <span className="h-2 w-2 bg-yellow-500 rounded-full mr-1 animate-pulse"></span>
+              <span className="flex items-center text-yellow-400">
+                <span className="h-2 w-2 bg-yellow-400 rounded-full mr-1 animate-pulse"></span>
                 Menyambung...
               </span>
             )}
             {connectionStatus === 'connected' && (
-              <span className="flex items-center text-xs text-green-500">
-                <span className="h-2 w-2 bg-green-500 rounded-full mr-1"></span>
+              <span className="flex items-center text-green-400">
+                <span className="h-2 w-2 bg-green-400 rounded-full mr-1"></span>
                 Terhubung
               </span>
             )}
             {connectionStatus === 'failed' && (
-              <span className="flex items-center text-xs text-red-500">
-                <span className="h-2 w-2 bg-red-500 rounded-full mr-1"></span>
-                Gagal terhubung
+              <span className="flex items-center text-red-400">
+                <span className="h-2 w-2 bg-red-400 rounded-full mr-1"></span>
+                Offline
               </span>
             )}
           </div>

@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "TanyaSehat - Sistem Deteksi Penyakit",
-  description: "Sistem Deteksi Penyakit Berbasis NLP untuk Bahasa Indonesia",
+  title: "FilmFinder - Sistem Rekomendasi Film",
+  description: "Sistem Rekomendasi Film Berbasis NLP untuk Bahasa Indonesia",
 };
 
 export default function RootLayout({

@@ -7,6 +7,7 @@ import { useState, ReactNode } from 'react';
 import FilmInputForm from './FilmInputForm';
 import FilmResultCard from './FilmResultCard';
 import FilmChatbot from './FilmChatbot';
+import Loading from './Loading';
 
 interface Tab {
   id: string;
@@ -25,26 +26,40 @@ export default function FilmTabs({ tabs }: TabsProps) {
   
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
-
   return (
     <div>
       {/* Tab Navigation */}
-      <div className="border-b border-gray-200 dark:border-gray-700 mb-6">
-        <nav className="flex space-x-8" aria-label="Tabs">
+      <div className="film-card p-1 mb-6 overflow-hidden">
+        <nav className="flex bg-gray-100 dark:bg-gray-800/50 rounded-lg p-1" aria-label="Tabs">
           {tabs.map(tab => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`
-                py-4 px-1 border-b-2 font-medium text-sm
+                flex-1 py-3 px-4 rounded-md font-medium text-sm transition-all duration-300 relative overflow-hidden
                 ${activeTab === tab.id
-                  ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
+                  ? 'bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 shadow-lg transform scale-105'
+                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 hover:bg-white/50 dark:hover:bg-gray-700/50'
                 }
               `}
               aria-current={activeTab === tab.id ? 'page' : undefined}
             >
-              {tab.label}
+              <span className="relative z-10 flex items-center justify-center space-x-2">
+                {tab.id === 'recommender' && (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                  </svg>
+                )}
+                {tab.id === 'chatbot' && (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  </svg>
+                )}
+                <span>{tab.label}</span>
+              </span>
+              {activeTab === tab.id && (
+                <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/20 to-orange-500/20 rounded-md" />
+              )}
             </button>
           ))}
         </nav>
@@ -57,22 +72,8 @@ export default function FilmTabs({ tabs }: TabsProps) {
             <FilmInputForm 
               onResult={setResult}
               onLoading={setLoading}
-            />
-            {loading ? (
-              <div className="w-full max-w-2xl mx-auto mt-6">
-                <div className="animate-pulse space-y-4 p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md">
-                  <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
-                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
-                  <div className="space-y-2">
-                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded"></div>
-                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-5/6"></div>
-                  </div>
-                  <div className="flex space-x-4">
-                    <div className="h-10 bg-gray-200 dark:bg-gray-700 rounded w-1/4"></div>
-                    <div className="h-10 bg-gray-200 dark:bg-gray-700 rounded w-1/4"></div>
-                  </div>
-                </div>
-              </div>
+            />            {loading ? (
+              <Loading />
             ) : (
               result && <FilmResultCard result={result} />
             )}

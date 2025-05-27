@@ -16,11 +16,10 @@ interface Message {
   films?: any[];
 }
 
-export default function FilmChatbot() {
-  const [messages, setMessages] = useState<Message[]>([
+export default function FilmChatbot() {  const [messages, setMessages] = useState<Message[]>([
     {
       type: 'bot',
-      content: 'Halo! Saya adalah asisten film yang dapat membantu Anda menemukan informasi tentang film. Apa yang ingin Anda ketahui tentang film?',
+      content: 'Halo! 🎬 Saya adalah FilmBot, asisten virtual yang siap membantu Anda menemukan informasi tentang film. Saya dapat memberikan rekomendasi, informasi detail film, atau menjawab pertanyaan seputar dunia perfilman. Apa yang ingin Anda ketahui?',
       timestamp: new Date()
     }
   ]);
@@ -229,26 +228,35 @@ export default function FilmChatbot() {
       </div>
     );
   };
-
   return (
-    <div className="w-full max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden flex flex-col h-[500px]">
-      {/* Header */}
-      <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-        <h2 className="text-lg font-semibold text-gray-800 dark:text-white">Film Assistant</h2>
-        <p className="text-sm text-gray-500 dark:text-gray-400">
-          Tanya tentang film, genre, atau rekomendasi tontonan
-        </p>
-      </div>
-      
-      {/* Chat Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        <AnimatePresence>
-          {messages.map((message, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
+    <div className="w-full max-w-4xl mx-auto">
+      <div className="film-card rounded-xl overflow-hidden flex flex-col h-[600px]">
+        {/* Header */}
+        <div className="px-6 py-4 bg-gradient-to-r from-purple-900/50 to-blue-900/50 border-b border-gray-600/30">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-900" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+              </svg>
+            </div>
+            <div>
+              <h2 className="text-lg font-bold text-gradient">FilmBot Assistant</h2>
+              <p className="text-sm text-gray-300">
+                Asisten virtual untuk informasi dan rekomendasi film
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        {/* Chat Messages */}
+        <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-900/20">
+          <AnimatePresence>
+            {messages.map((message, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
               className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
             >
               <div className={`max-w-[80%] ${
@@ -333,8 +341,8 @@ export default function FilmChatbot() {
         <div className="mt-2 text-xs text-gray-500 dark:text-gray-400 flex justify-between">
           <span>Tanyakan tentang judul, genre, atau rekomendasi film</span>
           <span>Contoh: "Film apa yang mirip dengan Inception?"</span>
-        </div>
-      </form>
+        </div>      </form>
+      </div>
     </div>
   );
 }
